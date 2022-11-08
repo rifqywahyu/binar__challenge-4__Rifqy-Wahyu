@@ -8,5 +8,14 @@
   "private": false,
   "scripts": {
     "start": "node server/index.js"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rifqywahyu/binar__challenge-4__Rifqy-Wahyu.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/rifqywahyu/binar__challenge-4__Rifqy-Wahyu/issues"
+  },
+  "homepage": "https://github.com/rifqywahyu/binar__challenge-4__Rifqy-Wahyu#readme"
 }
