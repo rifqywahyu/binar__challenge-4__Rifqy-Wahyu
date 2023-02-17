@@ -109,23 +109,29 @@
           </div>
           <div class="col">
             <label for="">Tanggal</label><br>
-            <input type="date" name="" id="tanggal_filter" style="width: 100%;" />
+            <input type="date" name="" id="tanggal" style="width: 100%;" />
           </div>
           <div class="col">
             <label for="">Jam diambil</label><br>
-            <input type="time" name="" id="jam_filter" style="width: 100%;" />
+            <input type="time" name="" id="jam" style="width: 100%;" />
           </div>
           <div class="col">
             <label for="">Jumlah penumpang (opsional)</label><br>
-            <input type="number" name="" id="jumlah_filter" style="width: 100%;" />
+            <input type="number" name="" id="jumlah" style="width: 100%;" />
           </div>
           <div class="col">
-            <button style="margin-top: 18px;" class="btn-lime">Cari Mobil</button>
+            <button style="margin-top: 18px;" class="btn-lime" id="filter-btn">Terapkan Filter</button>
+            <button style="margin-top: 18px;" class="btn-lime" id="load-btn">Cari Mobil</button>
           </div>
         </div>
       </div>
     </div>
     <!-- Section One -->
+
+    <div class="row" style="margin-top: 150px; display: flex; justify-content: center;">
+      <button class="btn-lime" id="clear-btn">clear</button>
+      <div id="cars-container"></div>
+    </div>
 
     <!-- Footer -->
     <footer class="container container-mobile py-5">
