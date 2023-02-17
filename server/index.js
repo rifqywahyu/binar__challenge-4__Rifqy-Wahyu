@@ -1,79 +1,67 @@
-const http = require('http');
-const path = require("path");
+const http = require("http");
 const fs = require("fs");
-const PUBLIC_DIRECTORY = path.join(__dirname, 'public');
-const DATA_DIRECTORY = path.join(__dirname, 'data');
+const url = require("url");
 
-const getHTML = (fileName) => {
-  const htmlFileIndex = path.join(PUBLIC_DIRECTORY, fileName);
-  const htmlIndex = fs.readFileSync(htmlFileIndex, 'utf8');
+const static = require("node-static");
+const path = require("path");
+const PUBLIC_DIR = path.join(__dirname, "../public");
+const fileStatic = new static.Server(PUBLIC_DIR);
 
-  return htmlIndex
+const { PORT = 8000 } = process.env;
+
+function getHTML(htmlFileName) {
+  const htmlFilePath = path.join(PUBLIC_DIR, htmlFileName);
+  return fs.readFileSync(htmlFilePath, "utf-8");
 }
 
-const onRequest = (req, res) => {
-  switch (req.url) {
+function onRequest(request, response) {
+  switch (request.url) {
     case "/":
-      const htmlIndex = getHTML('index.html');
+      response.writeHead(200);
+      response.end(getHTML("index.html"));
+      return;
+    case "/cars":
+      response.writeHead(200);
+      response.end(getHTML("cariMobil.html"));
+      return;
 
-      res.setHeader('Content-Type', 'text/html');
-      res.writeHead(200);
-      res.end(htmlIndex);
+    default:
+      
+      const fileTypes = {
+        css: "text/css",
+        js: "application/javascript",
+        ico: "image/x-icon",
+        png: "image/png",
+        jpg: "image/jpeg",
+        jpeg: "image/jpeg",
+        svg: "image/svg+xml",
+        json: "application/json",
+        map: "application/json",
+        txt: "text/plain",
+      };
+      const pathname = url.parse(request.url, true).pathname;
+      fs.readFile("./public" + pathname, (err, file) => {
+        if (err) {
+          response.status = 404;
+          response.end("404 Not Found BRO");
+          return;
+        }
 
-      return
-    case "/about":
-      const htmlAbout = getHTML('about.html');
-
-      res.setHeader('Content-Type', 'text/html');
-      res.writeHead(200);
-      res.end(htmlAbout);
-
-      return
-    case "/json":
-      const personJSON = JSON.stringify({
-        name: "Aldi",
-        age: 99
-      }); // object js ke json
-
-      // JSON.parse(person) // json ke object js
-
-      res.setHeader('Content-Type', 'application/json');
-      res.writeHead(200);
-      res.end(personJSON);
-
-      return
-    case "/people":
-      const dataLoc = path.join(DATA_DIRECTORY, "people.json");
-      const dataJSON = fs.readFileSync(dataLoc, 'utf8');
-
-      res.setHeader('Content-Type', 'application/json');
-      res.writeHead(200);
-      res.end(dataJSON);
-
-      return
-    case "/js":
-      const dir = path.join(PUBLIC_DIRECTORY + "/scripts", "index.js");
-      const content = fs.readFileSync(dir, 'utf8');
-
-      res.setHeader('Content-Type', 'text/javascript');
-      res.writeHead(200);
-      res.end(content);
-
-      return
-    case "/image-favicon.png":
-      const imgDir = path.join(PUBLIC_DIRECTORY + "/images", "favicon.png");
-      const imgContent = fs.readFileSync(imgDir);
-
-      res.setHeader('Content-Type', 'image/png');
-      res.writeHead(200);
-      res.end(imgContent, "binary");
-
-      return
+        for (const [key] of Object.entries(fileTypes)) {
+          const end = `.${key}`;
+          if (request.url.endsWith(end)) {
+            response.setHeader("Content-Type", fileTypes[key]);
+            response.end(file);
+            return;
+          }
+        }
+      });
+      return;
   }
 }
 
-const server = http.createServer(onRequest)
+const server = http.createServer(onRequest);
 
-server.listen(2000, '127.0.0.1', () => {
-  console.log("Server sudah berjalan, silakan buka http://localhost:2000");
-})
+server.listen(PORT, "localhost", () => {
+  console.log(`Server running at http://localhost:%d`, PORT);
+});

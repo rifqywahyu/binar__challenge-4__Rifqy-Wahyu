@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/rifqywahyu/binar__challenge-4__Rifqy-Wahyu/issues"
   },
-  "homepage": "https://github.com/rifqywahyu/binar__challenge-4__Rifqy-Wahyu#readme"
+  "homepage": "https://github.com/rifqywahyu/binar__challenge-4__Rifqy-Wahyu#readme",
+  "dependencies": {
+    "node-static": "^0.7.11"
+  }
 }
